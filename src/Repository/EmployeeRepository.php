@@ -45,6 +45,18 @@ class EmployeeRepository extends ServiceEntityRepository
         }
     }
 
+
+    /**
+     * @return Employes[]
+     */
+    public function findAllEmployes(): array
+    {
+
+        $qb = $this->createQueryBuilder('e');
+
+        return $qb->getQuery()->getResult();
+    }
+
     // /**
     //  * @return Employee[] Returns an array of Employee objects
     //  */
