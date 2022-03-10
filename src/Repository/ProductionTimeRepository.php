@@ -45,6 +45,16 @@ class ProductionTimeRepository extends ServiceEntityRepository
         }
     }
 
+    public function totalTime()
+    {
+        $qb = $this->createQueryBuilder('t')
+            ->select('SUM(t.time)')
+        ;
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+    
+
     // /**
     //  * @return ProductionTime[] Returns an array of ProductionTime objects
     //  */
