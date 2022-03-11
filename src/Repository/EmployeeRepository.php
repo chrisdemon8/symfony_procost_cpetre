@@ -6,6 +6,7 @@ use App\Entity\Employee;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -44,7 +45,27 @@ class EmployeeRepository extends ServiceEntityRepository
             $this->_em->flush();
         }
     }
-  
+
+
+    public function findOneWithDetails(int $id): ?Employee
+    {
+        $qb = $this->createQueryBuilder('e')
+            ->where('e.id = :id')
+            ->setParameter('id', $id);
+
+        $this->addJob($qb);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+
+    private function addJob(QueryBuilder $qb): void
+    {
+        $qb
+            ->addSelect('m')
+            ->leftJoin('e.job', 'm');
+    }
+
     // /**
     //  * @return Employee[] Returns an array of Employee objects
     //  */

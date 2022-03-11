@@ -15,7 +15,7 @@
 			</div>
 			<ul class="app-breadcrumb breadcrumb">
 				<li class="breadcrumb-item">
-					<a href="#">
+					<a href="{{ path('main_homepage') }}">
 						<i class="fa fa-home fa-lg"></i>
 					</a>
 				</li>
@@ -47,7 +47,7 @@
 								<td>{{ employee.dailyCost }}</td>
 								<td>{{ employee.hireDate|date('d/m/Y') }}</td>
 								<td>
-									<a href="detail.html" class="btn btn-primary btn-sm">
+									<a href="{{ path('employee_detail', {'id': employee.id}) }}" class="btn btn-primary btn-sm">
 										<i class="fa fa-eye mr-0"></i>
 									</a>
 									<a href="form.html" class="btn btn-info btn-sm">
