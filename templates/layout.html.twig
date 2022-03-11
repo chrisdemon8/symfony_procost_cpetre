@@ -24,9 +24,10 @@
 				<p class="app-sidebar__user-designation">Manager</p>
 			</div>
 		</div>
+		{%  set current_route = app.request.attributes.get('_route') %}
 		<ul class="app-menu">
 			<li>
-				<a class="app-menu__item active"  href="{{ path('main_homepage') }}">
+				<a class="app-menu__item {{ current_route is same as('main_homepage') ? 'active' }}"  href="{{ path('main_homepage') }}">
 					<i class="app-menu__icon fa fa-dashboard"></i>
 					<span class="app-menu__label">Tableau de bord</span>
 				</a>
@@ -38,7 +39,7 @@
 				</a>
 			</li>
 			<li>
-				<a class="app-menu__item" href="{{ path('employee_list') }}">
+				<a class="app-menu__item {{ current_route is same as('employee_list') ? 'active' }}" href="{{ path('employee_list') }}">
 					<i class="app-menu__icon fa fa-users"></i>
 					<span class="app-menu__label">Employés</span>
 				</a>
