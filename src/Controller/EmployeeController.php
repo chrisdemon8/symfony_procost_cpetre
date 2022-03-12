@@ -57,7 +57,7 @@ class EmployeeController extends AbstractController
     /**
      * @Route("/list/add", name="add", methods={"GET", "POST"})
      */
-    public function ajoutEmploye(Request $request): Response
+    public function addEmploye(Request $request): Response
     {
         $employee = new Employee();
         $form = $this->createForm(EmployeeType::class, $employee);

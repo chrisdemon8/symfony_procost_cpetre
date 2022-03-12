@@ -1,0 +1,134 @@
+ {% extends 'layout.html.twig' %}
+
+{% block title %}Détail Projet {{ project.id }}- {{ parent() }}{% endblock %}
+
+{% block content %}
+
+ 
+ <main class="app-content">
+            <div class="app-title">
+                <div>
+                    <h1><i class="fa fa-users"></i>&nbsp;Suivi du projet {{project.name}}</h1>
+                </div>
+                <ul class="app-breadcrumb breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{{ path('main_homepage') }}"><i class="fa fa-home fa-lg"></i></a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{{ path('project_list') }}">Projets</a>
+                    </li>
+                    <li class="breadcrumb-item">Suivi du projet {{project.name}} </li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="tile">
+                        <table class="table table-striped table-bordered table-sm">
+                            <tbody>
+                                <tr>
+                                    <th>Nom</td>
+                                    <td>{{project.name}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Description</td>
+                                    <td>{{ project.description }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Prix</td>
+                                    <td>{{ project.price }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Date de création</td>
+                                    <td>{{project.createdAt|date('d/m/Y')}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Date de livraison</td>
+                                    <td>{{project.deliveredAt|date('d/m/Y') }} €</td>
+                                </tr> 
+                            </tbody>
+                        </table>
+                        <a href="{{ path('project_modif', {'id': project.id}) }}" class="btn btn-info">
+                            <i class="fa fa-pencil"></i>Modifier
+                        </a>
+                    </div>
+                    <div class="tile">
+                        <h3 class="title-title mb-4">Ajouter un temps</h3>
+                        {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
+                            <div class="form-group row">
+                                <label for="select-projects" class="control-label col-md-6">Employé concerné</label>
+                                <div class="col-md-6">
+                                {{ form_errors(form.employee) }}
+                                {{ form_label(form.employee) }}
+                                {{ form_widget(form.employee, {'attr': {'class': 'form-control', 'placeholder': form.employee.vars.label} }) }}
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="days-count" class="control-label col-md-6">Nombre de jours</label>
+                                    <div class="col-md-6">
+                                        {{ form_errors(form.time) }}
+                                        {{ form_label(form.time) }}
+                                        {{ form_widget(form.time, {'attr': {'class': 'form-control', 'placeholder': form.time.vars.label} }) }}
+                                    </div>
+                            </div>
+                            <div class="row">
+                                <div class="offset-md-6 col-md-8">
+                                    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i>Enregistrer</button>
+                                </div>
+                            </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="tile pb-5">
+                        <h3 class="tile-title">Historique des employés sur le projet</h3>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Email</th>
+                                        <th>Métier</th>
+                                        <th>Coût journalier</th>
+                                        <th>Date d'embauche</th>
+                                    </tr>
+                                </thead>
+                                <tbody>  
+                                    {% for productionTime in project.productionTimes %}
+                                        <tr>
+                                            <td>{{ productionTime.employee.lastname }}</td>
+                                            <td>{{ productionTime.employee.firstname }}</td>
+                                            <td>{{ productionTime.employee.email }}</td>
+                                            <td>{{ productionTime.employee.job.label }}</td>
+                                            <td>{{ productionTime.time }}</td>
+                                            <td>{{ productionTime.entryAt|date('d/m/Y') }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <hr/>
+                        <nav class="float-right">
+                            <ul class="pagination">
+                                <li class="page-item disabled">
+                                    <span class="page-link">&laquo;</span>
+                                </li>
+                                <li class="page-item active" aria-current="page">
+                                    <span class="page-link">1<span class="sr-only">(current)</span></span>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">2</a></li>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">3</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">&raquo;</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+{% endblock %}
