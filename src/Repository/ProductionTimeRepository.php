@@ -7,6 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @method ProductionTime|null find($id, $lockMode = null, $lockVersion = null)
@@ -48,12 +49,54 @@ class ProductionTimeRepository extends ServiceEntityRepository
     public function totalTime()
     {
         $qb = $this->createQueryBuilder('t')
-            ->select('SUM(t.time)')
-        ;
+            ->select('SUM(t.time)');
 
         return $qb->getQuery()->getSingleScalarResult();
     }
+
+
+    /* SQL MAX : SELECT MAX(z.SumCoast) 
+                FROM ( SELECT SUM(daily_cost*time) as SumCoast 
+                FROM employee, production_time WHERE employee.id = production_time.employee_id GROUP BY production_time.employee_id) z  
     
+    */
+    /* SQL :  SELECT *, SUM(daily_cost*time) FROM `employee`, `production_time` WHERE employee.id = production_time.employee_id GROUP BY production_time.employee_id; */
+    public function findBestEmployee()
+    {
+
+        $qb  = $this->createQueryBuilder('t');
+        $qb2 = $qb;
+
+        $qb2 = $this->createQueryBuilder('t')
+            ->addSelect('SUM(e.dailyCost*t.time) AS sumCoast')
+            ->addSelect('e.lastname')
+            ->addSelect('e.firstname')
+            ->addSelect('e.hireDate')
+            ->leftJoin('t.employee', 'e')
+            ->groupBy('t.employee');
+
+        /*
+        $qb = $this->createQueryBuilder('t')  
+            ->addSelect($qb->expr()->max('t.id', $qb2->getDQL()))
+             ;*/
+
+        return $qb2->getQuery()->getResult();
+    }
+ 
+
+    /**
+     * @return ProductionTime[]
+     */
+    public function findLastCreatedProductionTime(): array
+    {
+        $qb = $this->createQueryBuilder('t')
+            ->orderBy('t.entryAt', 'DESC')
+            ->setMaxResults(6);
+
+        return $qb->getQuery()->getResult();
+    }
+
+
 
     // /**
     //  * @return ProductionTime[] Returns an array of ProductionTime objects

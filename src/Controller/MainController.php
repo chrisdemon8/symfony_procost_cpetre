@@ -33,13 +33,22 @@ class MainController extends AbstractController
 
         $employees = $this->employeeRepository->findAll();
         $projects = $this->projectRepository->findAll();
+        $finishProject = $this->projectRepository->findFinishProject(); 
+        $progressProject = $this->projectRepository->findProgressProject(); 
         $totalTime = $this->productionTimeRepository->totalTime();
-
-
+        $lastCreatedProject = $this->projectRepository->findLastCreated(); 
+        $lastCreatedProductionTime = $this->productionTimeRepository->findLastCreatedProductionTime();
+        $findBestEmployee = $this->productionTimeRepository->findBestEmployee(); 
+ 
         return $this->render('main/index.html.twig', [
             'employees' => $employees,
+            'lastCreatedProject' => $lastCreatedProject,
+            'findBestEmployee' => $findBestEmployee,
+            'lastCreatedProductionTime' => $lastCreatedProductionTime,
             'projects' => $projects,
             'totalTime' => $totalTime,
+            'finishProject' => $finishProject,
+            'progressProject' => $progressProject,
         ]);
     }
 }

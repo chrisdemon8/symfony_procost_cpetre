@@ -50,10 +50,38 @@ class ProjectRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('m')
             ->where('m.id = :id')
-            ->setParameter('id' , $id) 
-        ; 
+            ->setParameter('id', $id);
         return $qb->getQuery()->getOneOrNullResult();
     }
+
+
+    public function findFinishProject()
+    {
+        $sql = $this->createQueryBuilder('p')
+            ->select('count(p.deliveredAt)')
+            ->where('p.deliveredAt <= CURRENT_TIMESTAMP()');
+        return $sql->getQuery()->getSingleScalarResult();
+    }
+
+    public function findProgressProject()
+    {
+        $sql = $this->createQueryBuilder('p')
+            ->select('count(p.deliveredAt)')
+            ->where('p.deliveredAt > CURRENT_TIMESTAMP()');
+        return $sql->getQuery()->getSingleScalarResult();
+    }
+
+
+    public function findLastCreated()
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->orderBy('p.createdAt', 'DESC')
+            ->setMaxResults(5);
+
+        return $qb->getQuery()->getResult();
+    }
+
+
 
     // /**
     //  * @return Project[] Returns an array of Project objects

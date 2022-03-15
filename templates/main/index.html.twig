@@ -2,10 +2,12 @@
 
 {% block content %}
 
+
 	<main class="app-content">
 		<div class="app-title">
 			<div>
 				<h1>
+					{{ dump(finishProject)}}
 					<i class="fa fa-dashboard"></i>&nbsp;Tableau de bord</h1>
 			</div>
 		</div>
@@ -18,7 +20,7 @@
 							<div class="info">
 								<p class="text-muted text-sm text-uppercase">Projets en cours</p>
 								<p>
-									<strong>{{ projects|length }}</strong>
+									<strong>{{ progressProject }}</strong>
 								</p>
 							</div>
 						</div>
@@ -29,7 +31,7 @@
 							<div class="info">
 								<p class="text-muted text-sm text-uppercase">Projets livrés</p>
 								<p>
-									<strong>76</strong>
+									<strong>{{ finishProject }}</strong>
 								</p>
 							</div>
 						</div>
@@ -90,20 +92,35 @@
 						<div class="card">
 							<div class="card-header text-center text-uppercase">Top employé</div>
 							<div class="card-body">
+
+								{% set maxValue = 0 %}
+								{% set bestEmployee =  0 %}
+								{% for employee in findBestEmployee %}
+									{% if  employee.sumCoast > maxValue  %}
+										{% set maxValue = employee.sumCoast %}
+										{% set bestEmployee = employee %}
+									{% endif %}
+								{% endfor %}
+
 								<div class="text-center">
 									<img src="img/ui-zac.jpg" class="rounded-circle" width="58">
 									<p class="mt-2">
-										<strong>Zac Producteur</strong>
+										<strong>
+											{{bestEmployee.lastname }}
+											-
+											{{bestEmployee.firstname}}
+										</strong>
 									</p>
 								</div>
 								<div class="row">
 									<div class="col-md-6">
 										<p class="small mt">EMPLOYÉ DEPUIS</p>
-										<p>Février 2012</p>
+										<p>{{bestEmployee.hireDate|date('d/m/Y')}}
+										</p>
 									</div>
 									<div class="col-md-6">
 										<p class="small mt">COÛT TOTAL</p>
-										<p>34 567 €</p>
+										<p>{{bestEmployee.sumCoast}}</p>
 									</div>
 								</div>
 							</div>
@@ -124,61 +141,23 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<th>
-									<a href="#">Mon projet</a>
-								</th>
-								<th>18/03/2018</th>
-								<th>20 000 €</th>
-								<th>3 200 €</th>
-								<th>
-									<span class="badge badge-success">OUI</span>
-								</th>
-							</tr>
-							<tr>
-								<th>
-									<a href="#">Mon projet</a>
-								</th>
-								<th>18/03/2018</th>
-								<th>20 000 €</th>
-								<th>3 200 €</th>
-								<th>
-									<span class="badge badge-success">OUI</span>
-								</th>
-							</tr>
-							<tr>
-								<th>
-									<a href="#">Mon projet</a>
-								</th>
-								<th>18/03/2018</th>
-								<th>20 000 €</th>
-								<th>3 200 €</th>
-								<th>
-									<span class="badge badge-success">OUI</span>
-								</th>
-							</tr>
-							<tr>
-								<th>
-									<a href="#">Mon projet</a>
-								</th>
-								<th>18/03/2018</th>
-								<th>20 000 €</th>
-								<th>3 200 €</th>
-								<th>
-									<span class="badge badge-success">OUI</span>
-								</th>
-							</tr>
-							<tr>
-								<th>
-									<a href="#">Mon projet</a>
-								</th>
-								<th>18/03/2018</th>
-								<th>20 000 €</th>
-								<th>3 200 €</th>
-								<th>
-									<span class="badge badge-danger">NON</span>
-								</th>
-							</tr>
+							{%  for project in lastCreatedProject %}
+								<tr>
+									<th>
+										<a href="project/list/{{ project.id }}/detail">{{ project.name }}</a>
+									</th>
+									<th>{{ project.createdAt|date('d/m/Y') }}</th>
+									<th>{{ project.price }}</th>
+									<th>1000</th>
+									<th>
+										{% if "now"|date('Y-m-d') > project.deliveredAt|date('Y-m-d') %}
+											<span class="badge badge-success">OUI</span>
+										{% else %}
+											<span class="badge badge-danger">NON</span>
+										{% endif %}
+									</th>
+								</tr>
+							{% endfor %}
 						</tbody>
 					</table>
 				</div>
@@ -187,42 +166,15 @@
 				<div class="tile">
 					<h2 class="tile-title text-center">Temps de production</h2>
 					<ul class="list-group">
-						<li class="list-group-item">
-							<a href="#">James Brown</a>
-							a travaillé sur
-							<a href="#">Projet 1</a>
-							<div class="text-muted font-italic text-right">4 jours</div>
-						</li>
-						<li class="list-group-item">
-							<a href="#">James Brown</a>
-							a travaillé sur
-							<a href="#">Projet 1</a>
-							<div class="text-muted font-italic text-right">4 jours</div>
-						</li>
-						<li class="list-group-item">
-							<a href="#">James Brown</a>
-							a travaillé sur
-							<a href="#">Projet 1</a>
-							<div class="text-muted font-italic text-right">4 jours</div>
-						</li>
-						<li class="list-group-item">
-							<a href="#">James Brown</a>
-							a travaillé sur
-							<a href="#">Projet 1</a>
-							<div class="text-muted font-italic text-right">4 jours</div>
-						</li>
-						<li class="list-group-item">
-							<a href="#">James Brown</a>
-							a travaillé sur
-							<a href="#">Projet 1</a>
-							<div class="text-muted font-italic text-right">4 jours</div>
-						</li>
-						<li class="list-group-item">
-							<a href="#">James Brown</a>
-							a travaillé sur
-							<a href="#">Projet 1</a>
-							<div class="text-muted font-italic text-right">4 jours</div>
-						</li>
+						{% for productionTime in lastCreatedProductionTime %}
+							<li class="list-group-item">
+								<a href="employee/list/{{ productionTime.employee.id }}/detail">{{ productionTime.employee.lastname }}</a>
+								a travaillé sur
+								<a href="project/list/{{ productionTime.project.id }}/detail">{{ productionTime.project.name }}</a>
+								<div class="text-muted font-italic text-right">{{ productionTime.time }}
+									heures</div>
+							</li>
+						{% endfor %}
 					</ul>
 				</div>
 			</div>
