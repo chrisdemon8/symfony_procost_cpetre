@@ -98,11 +98,18 @@ class JobController extends AbstractController
     public function deleteJob(int $id, PaginatorInterface $paginator, Request $request): Response
     {
 
+
+        
         $job = $this->jobRepository->findOne($id);
         if ($job === null) {
             throw new NotFoundHttpException('Le métier d\'id ' . $id . ' n\'existe pas.');
         }
-
+  
+        if($job->getEmployees()->count() > 0)
+        {
+            throw new NotFoundHttpException('Le métier d\'id ' . $id . ' est utilisé pour des employés.');
+        }
+   
         $pagination = $paginator->paginate(
             $jobs = $this->jobRepository->findAll(),
             $request->query->getInt('page', 1),

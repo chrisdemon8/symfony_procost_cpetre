@@ -11,13 +11,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 
 class MainController extends AbstractController
-{
-
+{ 
     private EmployeeRepository $employeeRepository;
     private ProjectRepository $projectRepository;
     private ProductionTimeRepository $productionTimeRepository;
-
-
+ 
     public function __construct(EmployeeRepository $employeeRepository, ProjectRepository  $projectRepository, ProductionTimeRepository $productionTimeRepository)
     {
         $this->employeeRepository = $employeeRepository;
@@ -39,11 +37,13 @@ class MainController extends AbstractController
         $lastCreatedProject = $this->projectRepository->findLastCreated(); 
         $lastCreatedProductionTime = $this->productionTimeRepository->findLastCreatedProductionTime();
         $findBestEmployee = $this->productionTimeRepository->findBestEmployee(); 
- 
+        $findRentability = $this->productionTimeRepository->findRentability(); 
+        
         return $this->render('main/index.html.twig', [
             'employees' => $employees,
             'lastCreatedProject' => $lastCreatedProject,
             'findBestEmployee' => $findBestEmployee,
+            'findRentability' => $findRentability,
             'lastCreatedProductionTime' => $lastCreatedProductionTime,
             'projects' => $projects,
             'totalTime' => $totalTime,

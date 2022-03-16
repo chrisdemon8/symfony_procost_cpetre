@@ -1,7 +1,7 @@
 {% extends 'layout.html.twig' %}
 
 {% block title %}
-	Ajout / Edition d'un projet -
+	{% if app.request.get('_route') == 'employee_add' %}Ajout {% else %} Edition {% endif %} d'un projet -
 	{{ parent() }}
 {% endblock %}
 
@@ -12,7 +12,7 @@
 		<div class="app-title">
 			<div>
 				<h1>
-					<i class="fa fa-users"></i>&nbsp;Ajout / Edition d'un projet</h1>
+					<i class="fa fa-users"></i>&nbsp;{% if app.request.get('_route') == 'employee_add' %}Ajout {% else %}  Edition {% endif %}d'un projet</h1>
 			</div>
 			<ul class="app-breadcrumb breadcrumb">
 				<li class="breadcrumb-item">
@@ -23,15 +23,17 @@
 				<li class="breadcrumb-item">
 					<a href="{{ path('project_list') }}">Projets</a>
 				</li>
-				<li class="breadcrumb-item">Ajout / Edition d'un projet</li>
+				<li class="breadcrumb-item"> {% if app.request.get('_route') == 'employee_add' %} Ajout {% else %} Edition {% endif %}d'un projet</li>
 			</ul>
 		</div>
 		<div class="tile">
-			<div class="alert alert-dismissible alert-success my-4">
-				<button class="close" type="button" data-dismiss="alert">×</button>
-				<strong>Well done!</strong>
-				Message flash.
-			</div>
+            {% for flash_type, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ flash_type }}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
 			{{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
 			<section>
 				<h3>Informations générales</h3>

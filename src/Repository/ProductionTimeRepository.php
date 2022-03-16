@@ -82,6 +82,27 @@ class ProductionTimeRepository extends ServiceEntityRepository
 
         return $qb2->getQuery()->getResult();
     }
+
+
+    /*
+    SELECT *, SUM(time*employee.daily_cost) FROM `project`, `production_time`, `employee` WHERE delivered_at <= CURRENT_TIMESTAMP AND production_time.project_id = project.id AND production_time.employee_id = employee.id GROUP BY production_time.project_id;
+    */ 
+
+    public function findRentability()
+    { 
+        $qb  = $this->createQueryBuilder('t');
+
+        $qb = $this->createQueryBuilder('t')
+            ->addSelect('SUM(e.dailyCost*t.time) AS sumCoastProject')
+            ->addSelect('p.id') 
+            ->addSelect('p.price')  
+            ->leftJoin('t.employee', 'e')
+            ->leftJoin('t.project', 'p')
+            ->groupBy('t.project');
+ 
+        return $qb->getQuery()->getResult();
+    }
+
  
 
     /**

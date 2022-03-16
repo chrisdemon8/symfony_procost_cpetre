@@ -26,13 +26,13 @@
 			</ul>
 		</div>
 		<div class="tile">
-			{% for flash_type, messages in app.flashes %}
-				{% for message in messages %}
-					<div class="alert alert-{{ flash_type }}" role="alert">
-						{{ message }}
-					</div>
-				{% endfor %}
-			{% endfor %}
+            {% for flash_type, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ flash_type }}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
 			{{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
 			<section>
 				<h3>Informations générales</h3>

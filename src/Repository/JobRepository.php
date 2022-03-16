@@ -56,6 +56,19 @@ class JobRepository extends ServiceEntityRepository
     }
 
 
+
+    public function findOneDependencie(int $id): ?array
+    {
+        $qb = $this->createQueryBuilder('j') 
+            ->where('j.id = :id') 
+            ->leftJoin('j.employees', 'e')
+            ->setParameter('id' , $id) 
+        ; 
+        return $qb->getQuery()->getResult();
+    }
+
+
+
     // /**
     //  * @return Job[] Returns an array of Job objects
     //  */
