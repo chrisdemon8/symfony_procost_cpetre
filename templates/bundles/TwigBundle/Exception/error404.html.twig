@@ -1,0 +1,16 @@
+{# templates/bundles/TwigBundle/Exception/error404.html.twig #}
+{% extends 'layout.html.twig' %}
+
+{% block title %} 
+	{{ parent() }}
+{% endblock %}
+
+{% block content %}
+	<main class="app-content">
+		<h1>Page non trouvée</h1>
+
+		<p> 
+			<a href="{{ path('main_homepage') }}">Retourner à l'accueil</a>.
+		</p>
+	</main>
+{% endblock %}

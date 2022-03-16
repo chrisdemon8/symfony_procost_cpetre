@@ -25,10 +25,17 @@
 			<a href="{{ path('job_add') }}" class="btn btn-primary float-right mb-4">
 				<i class="fa fa-plus-circle mr-2"></i>Ajouter un métier</a>
 			<div class="table-responsive">
+				{% for flash_type, messages in app.flashes %}
+					{% for message in messages %}
+						<div class="alert alert-{{ flash_type }}" role="alert">
+							{{ message }}
+						</div>
+					{% endfor %}
+				{% endfor %}
 				<table class="table table-striped table-hover">
 					<thead>
 						<tr>
-							<th>Métier</th> 
+							<th>Métier</th>
 							<th></th>
 						</tr>
 					</thead>

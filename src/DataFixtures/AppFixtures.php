@@ -7,6 +7,7 @@ use App\Entity\Job;
 use App\Entity\ProductionTime;
 use App\Entity\Project;
 use DateTime;
+use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -35,14 +36,13 @@ class AppFixtures extends Fixture
 
     private function loadEmployees(): void
     {
-
-
+ 
         for ($i = 1; $i < 10; $i++) {
             $employees = (new Employee())
                 ->setFirstname('Prenom ' . $i)
                 ->setLastname('Nom ' . $i)
                 ->setEmail('nom' . $i . '@procost.com')
-                ->setDailyCost('200'); 
+                ->setDailyCost(random_int(100, 700));
 
             /** @var Job $jobs */
             $jobs = $this->getReference(Job::class . random_int(1, 3));
@@ -53,16 +53,29 @@ class AppFixtures extends Fixture
         }
     }
 
+    public function getRandomDate(DateTimeImmutable $debut,DateTimeImmutable $fin):DateTimeImmutable{
+        $randomTimestamp = mt_rand($debut->getTimestamp(),$fin->getTimestamp());
+        $randomDate = new DateTimeImmutable();
+        return  $randomDate->setTimestamp($randomTimestamp);
+    }
+     
+    
+     
+
 
     private function loadProjects(): void
     {
+ 
+        $start = new DateTimeImmutable('2019-10-10');
+        $end = new DateTimeImmutable('2023-10-10');
+        
 
-        for ($i = 1; $i < 12; $i++) {
+        for ($i = 1; $i < 12; $i++) { 
             $projectClass = (new Project())
                 ->setName('Projet ' . $i)
                 ->setDescription('Description pour le projet ' . $i)
-                ->setDeliveredAt(new DateTime('2000-01-01'))
-                ->setPrice(random_int(50, 500)); 
+                ->setDeliveredAt($this->getRandomDate($start,$end))
+                ->setPrice(random_int(1000, 20000));
             $this->manager->persist($projectClass);
             $this->addReference(Project::class . $i, $projectClass);
         }

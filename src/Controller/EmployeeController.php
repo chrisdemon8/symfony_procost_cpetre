@@ -65,7 +65,7 @@ class EmployeeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
+            $this->addFlash('success', 'L\'employé a été ajouté');
             $this->employeeManager->save($employee);
 
             return $this->redirectToRoute('employee_add');
@@ -88,7 +88,7 @@ class EmployeeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
+            $this->addFlash('success', 'L\'employé a été modifié');
             $this->employeeManager->save($employee);
 
             return $this->redirectToRoute('employee_list');
@@ -116,8 +116,7 @@ class EmployeeController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-
+        if ($form->isSubmitted() && $form->isValid()) { 
             $this->productionTimeManager->save($productionTime);
         }
 

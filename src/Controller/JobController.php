@@ -58,7 +58,7 @@ class JobController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
+            $this->addFlash('success', 'Le métié a été ajouté'); 
             $this->jobManager->save($job);
 
             return $this->redirectToRoute('job_add');
@@ -81,7 +81,7 @@ class JobController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
+            $this->addFlash('success', 'Le métier a été modifié'); 
             $this->jobManager->save($job);
 
             return $this->redirectToRoute('job_list');
@@ -104,17 +104,22 @@ class JobController extends AbstractController
         if ($job === null) {
             throw new NotFoundHttpException('Le métier d\'id ' . $id . ' n\'existe pas.');
         }
-  
-        if($job->getEmployees()->count() > 0)
-        {
-            throw new NotFoundHttpException('Le métier d\'id ' . $id . ' est utilisé pour des employés.');
-        }
    
         $pagination = $paginator->paginate(
             $jobs = $this->jobRepository->findAll(),
             $request->query->getInt('page', 1),
             10
         );
+
+        if($job->getEmployees()->count() > 0)
+        {
+            $this->addFlash('warning', 'Le métier est utilisé par des employés, suppression non possible');
+            return $this->redirectToRoute('job_list', [
+                'job' => $job,
+                'pagination' => $pagination
+    
+            ]);
+        }
 
         $this->jobManager->removeJob($job);
 

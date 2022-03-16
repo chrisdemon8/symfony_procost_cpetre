@@ -68,8 +68,7 @@ class ProjectController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-
+        if ($form->isSubmitted() && $form->isValid()) { 
             $this->productionTimeManager->save($productionTime);
         }
 
@@ -94,7 +93,7 @@ class ProjectController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $this->projectManager->save($project);
-
+            $this->addFlash('success', 'Le projet a été ajouté'); 
             return $this->redirectToRoute('project_add');
         }
 
@@ -116,7 +115,7 @@ class ProjectController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
+            $this->addFlash('success', 'Le projet a été modifié'); 
             $this->projectManager->save($project);
 
             return $this->redirectToRoute('project_list');
