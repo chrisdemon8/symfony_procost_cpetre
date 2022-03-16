@@ -55,8 +55,8 @@ class ProductionTimeRepository extends ServiceEntityRepository
     }
 
 
-    /* SQL MAX : SELECT MAX(z.SumCoast) 
-                FROM ( SELECT SUM(daily_cost*time) as SumCoast 
+    /* SQL MAX : SELECT MAX(z.SumCost) 
+                FROM ( SELECT SUM(daily_cost*time) as SumCost 
                 FROM employee, production_time WHERE employee.id = production_time.employee_id GROUP BY production_time.employee_id) z  
     
     */
@@ -68,7 +68,7 @@ class ProductionTimeRepository extends ServiceEntityRepository
         $qb2 = $qb;
 
         $qb2 = $this->createQueryBuilder('t')
-            ->addSelect('SUM(e.dailyCost*t.time) AS sumCoast')
+            ->addSelect('SUM(e.dailyCost*t.time) AS sumCost')
             ->addSelect('e.lastname')
             ->addSelect('e.firstname')
             ->addSelect('e.hireDate')
@@ -93,7 +93,7 @@ class ProductionTimeRepository extends ServiceEntityRepository
         $qb  = $this->createQueryBuilder('t');
 
         $qb = $this->createQueryBuilder('t')
-            ->addSelect('SUM(e.dailyCost*t.time) AS sumCoastProject')
+            ->addSelect('SUM(e.dailyCost*t.time) AS sumCostProject')
             ->addSelect('p.id') 
             ->addSelect('p.price')  
             ->leftJoin('t.employee', 'e')
@@ -102,7 +102,6 @@ class ProductionTimeRepository extends ServiceEntityRepository
  
         return $qb->getQuery()->getResult();
     }
-
  
 
     /**

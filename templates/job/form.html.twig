@@ -1,7 +1,7 @@
 {% extends 'layout.html.twig' %}
 
 {% block title %}
-	Ajout / Edition d'un métier -
+	{% if app.request.get('_route') == 'job_add' %}Ajout {% else %} Edition {% endif %} d'un métier -
 	{{ parent() }}
 {% endblock %}
 
@@ -11,7 +11,7 @@
 		<div class="app-title">
 			<div>
 				<h1>
-					<i class="fa fa-users"></i>&nbsp;Ajout / Edition d'un métier</h1>
+					<i class="fa fa-users"></i>&nbsp;{% if app.request.get('_route') == 'job_add' %} Ajout {% else %} Edition {% endif %}d'un métier</h1>
 			</div>
 			<ul class="app-breadcrumb breadcrumb">
 				<li class="breadcrumb-item">
@@ -22,7 +22,7 @@
 				<li class="breadcrumb-item">
 					<a href="{{ path('job_list') }}">Métiers</a>
 				</li>
-				<li class="breadcrumb-item">Ajout / Edition d'un métier</li>
+				<li class="breadcrumb-item">{% if app.request.get('_route') == 'job_add' %}Ajout  {% else %}  Edition {% endif %}d'un métier</li>
 			</ul>
 		</div>
 		<div class="tile">

@@ -6,11 +6,11 @@
 	<main class="app-content">
 		<div class="app-title">
 			<div>
-				<h1> 
+				<h1>
 					<i class="fa fa-dashboard"></i>&nbsp;Tableau de bord</h1>
 			</div>
 		</div>
-		
+
 		<div class="row">
 			<div class="col-md-9">
 				<div class="row">
@@ -66,16 +66,17 @@
 							<div class="card-body">
 								<p class="text-muted">
 									<i class="fa fa-database mr-2 text-primary"></i>
+ 
+									{% set rentability = 0 %}
+									{% set bestEmployee =  0 %}
+									{% for project in findRentability %}
+										{% if  project.sumCostProject < project.price  %}
+											{% set rentability = rentability + 1 %}
+										{% endif %}
+									{% endfor %}
 
-								{% set rentability = 0 %}
-								{% set bestEmployee =  0 %}
-								{% for project in findRentability %}
-									{% if  project.sumCoastProject < project.price  %}
-										{% set rentability = rentability + 1 %} 
-									{% endif %}
-								{% endfor %}
-  
-								{{ ((rentability * 100) / findRentability|length) |round(2, 'floor') }} % RENTABLE
+									{{ ((rentability * 100) / findRentability|length) |round(2, 'floor') }}
+									% RENTABLE
 								</p>
 								<div class="embed-responsive embed-responsive-16by9">
 									<canvas id="ratio-chart" class="embed-responsive-item"></canvas>
@@ -89,7 +90,8 @@
 							<div class="card-body">
 								<p class="text-muted">
 									<i class="fa fa fa-check-square-o mr-2 text-primary"></i>
-									{{ (((finishProject)*100)/ projects|length )|round(2, 'floor') }} % Livrés
+									{{ (((finishProject)*100)/ projects|length )|round(2, 'floor') }}
+									% Livrés
 								</p>
 								<div class="embed-responsive embed-responsive-16by9">
 									<canvas id="delivered-chart" class="embed-responsive-item"></canvas>
@@ -105,8 +107,8 @@
 								{% set maxValue = 0 %}
 								{% set bestEmployee =  0 %}
 								{% for employee in findBestEmployee %}
-									{% if  employee.sumCoast > maxValue  %}
-										{% set maxValue = employee.sumCoast %}
+									{% if  employee.sumCost > maxValue  %}
+										{% set maxValue = employee.sumCost %}
 										{% set bestEmployee = employee %}
 									{% endif %}
 								{% endfor %}
@@ -129,7 +131,7 @@
 									</div>
 									<div class="col-md-6">
 										<p class="small mt">COÛT TOTAL</p>
-										<p>{{bestEmployee.sumCoast}}</p>
+										<p>{{bestEmployee.sumCost |format_currency('EUR')}} </p>
 									</div>
 								</div>
 							</div>
@@ -156,8 +158,16 @@
 										<a href="project/list/{{ project.id }}/detail">{{ project.name }}</a>
 									</th>
 									<th>{{ project.createdAt|date('d/m/Y') }}</th>
-									<th>{{ project.price }}</th>
-									<th>1000</th>
+									<th>{{ project.price|format_currency('EUR')  }}  </th>
+									<th>
+										{% for projectCost in findRentability %}
+											{% if  projectCost.id == project.id %}
+												{% if  projectCost.sumCostProject > 0 %}
+													{{projectCost.sumCostProject}}
+												{% endif %}
+											{% endif %}
+										{% endfor %}
+										€</th>
 									<th>
 										{% if "now"|date('Y-m-d') > project.deliveredAt|date('Y-m-d') %}
 											<span class="badge badge-success">OUI</span>

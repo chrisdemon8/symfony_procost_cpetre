@@ -43,7 +43,7 @@
 				{% set rentability = 0 %}
 				{% set bestEmployee =  0 %}
 				{% for project in findRentability %}
-					{% if  project.sumCoastProject < project.price  %}
+					{% if  project.sumCostProject < project.price  %}
 						{% set rentability = rentability + 1 %}
 					{% endif %}
 				{% endfor %}
